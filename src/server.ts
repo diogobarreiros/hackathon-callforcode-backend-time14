@@ -6,6 +6,7 @@ import cors from 'cors';
 import routes from './routes';
 import { errors } from 'celebrate';
 
+const cfenv = require('cfenv');
 const app = express();
 
 app.use(cors());
@@ -14,6 +15,8 @@ app.use(routes);
 
 app.use(errors());
 
-app.listen(3333, () => {
-  console.log('Server started on port 3333!');
+const appEnv = cfenv.getAppEnv();
+
+app.listen(appEnv.port, () => {
+  console.log('Server started on ' + appEnv.url);
 });
