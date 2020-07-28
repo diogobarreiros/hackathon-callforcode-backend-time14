@@ -1,15 +1,17 @@
 import { Request, Response } from 'express';
 import knex from '../database/connection';
 
+const cfenv = require('cfenv');
+const appEnv = cfenv.getAppEnv();
+
 class UsersController {
   async index(request: Request, response: Response) {
     const users = await knex('users').select('*');
 
     const serializedUsers = users.map((user) => {
       return {
-        name: user.name,
-        email: user.email,
-        phone: user.phone,
+        ...user,
+        image_url: `${appEnv.url}/uploads/${user.image}`,
       };
     });
 
@@ -25,7 +27,12 @@ class UsersController {
       return response.status(400).json({ message: 'User not found.' });
     }
 
-    return response.json(user);
+    const serializedUser = {
+      ...user,
+      image_url: `${appEnv.url}/uploads/${user.image}`,
+    };
+
+    return response.json(serializedUser);
   }
 
   async delete(request: Request, response: Response) {
@@ -57,6 +64,7 @@ class UsersController {
       name,
       email,
       phone,
+      image: request.file.filename,
     };
 
     const insertedIds = await trx('users').insert(user);

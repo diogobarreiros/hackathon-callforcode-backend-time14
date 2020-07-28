@@ -1,9 +1,14 @@
 import express from 'express';
 import { celebrate, Joi } from 'celebrate';
 
+import multer from 'multer';
+import multerConfig from './config/multer';
+
 import UsersController from './controllers/UsersController';
 
 const routes = express.Router();
+
+const upload = multer(multerConfig);
 
 const usersController = new UsersController();
 
@@ -13,6 +18,7 @@ routes.delete('/users/:id', usersController.delete);
 
 routes.post(
   '/users',
+  upload.single('image'),
   celebrate(
     {
       body: Joi.object().keys({
