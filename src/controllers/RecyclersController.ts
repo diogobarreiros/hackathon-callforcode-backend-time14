@@ -45,6 +45,22 @@ class RecyclersController {
     return response.json(serializedRecycler);
   }
 
+  async delete(request: Request, response: Response) {
+    const { id } = request.params;
+
+    const recycler = await knex('recyclers').where('id', id).first();
+
+    if (!recycler) {
+      return response.status(400).json({ message: 'Recycler not found.' });
+    }
+
+    const trx = await knex.transaction();
+    await trx('recyclers').delete(recycler);
+    await trx.commit();
+
+    return response.json({ message: 'Recycler deleted' });
+  }
+
   async create(request: Request, response: Response) {
     const {
       name,

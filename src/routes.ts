@@ -25,7 +25,7 @@ routes.post(
       body: Joi.object().keys({
         name: Joi.string().required(),
         email: Joi.string().required().email(),
-        phone: Joi.number().required(),
+        phone: Joi.string().required(),
         password: Joi.string().required(),
       }),
     },
@@ -44,6 +44,7 @@ routes.patch(
 
 routes.get('/recyclers/:id', recyclersController.show);
 routes.get('/recyclers', recyclersController.index);
+routes.delete('/recyclers/:id', recyclersController.delete);
 
 routes.post(
   '/recyclers',
@@ -52,7 +53,7 @@ routes.post(
       body: Joi.object().keys({
         name: Joi.string().required(),
         email: Joi.string().required().email(),
-        phone: Joi.number().required(),
+        phone: Joi.string().required(),
         password: Joi.string().required(),
         document: Joi.string().required(),
         enterprise: Joi.boolean().required(),
