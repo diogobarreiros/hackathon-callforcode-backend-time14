@@ -3,3 +3,4 @@ applications:
  - name: callforcodeclimate2020
    random-route: true
    memory: 256M
+   start: node server.js

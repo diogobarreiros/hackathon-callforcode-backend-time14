@@ -11,7 +11,8 @@ class UsersController {
     const serializedUsers = users.map((user) => {
       return {
         ...user,
-        image_url: `${appEnv.url}/uploads/${user.image}`,
+        image_url: user.image ? `${appEnv.url}/uploads/${user.image}` :
+          'Image not found.',
       };
     });
 
@@ -29,7 +30,8 @@ class UsersController {
 
     const serializedUser = {
       ...user,
-      image_url: `${appEnv.url}/uploads/${user.image}`,
+      image_url: user.image ? `${appEnv.url}/uploads/${user.image}` :
+          'Image not found.',
     };
 
     return response.json(serializedUser);
@@ -64,7 +66,6 @@ class UsersController {
       name,
       email,
       phone,
-      image: request.file.filename,
     };
 
     const insertedIds = await trx('users').insert(user);
@@ -77,6 +78,29 @@ class UsersController {
       id: user_id,
       ...user,
     });
+  }
+
+  async update(request: Request, response: Response) {
+    const { id } = request.params;
+
+    const user = await knex('users').where('id', id).first();
+
+    if (!user) {
+      return response.status(400).json({ message: 'User not found.' });
+    }
+
+    user.image = request.file.filename;
+
+    const trx = await knex.transaction();
+    await trx('users').update(user);
+    await trx.commit();
+
+    const serializedUser = {
+      ...user,
+      image_url: `${appEnv.url}/uploads/${user.image}`,
+    };
+
+    return response.json(serializedUser);
   }
 }
 

@@ -18,7 +18,6 @@ routes.delete('/users/:id', usersController.delete);
 
 routes.post(
   '/users',
-  upload.single('image'),
   celebrate(
     {
       body: Joi.object().keys({
@@ -32,6 +31,12 @@ routes.post(
     }
   ),
   usersController.create
+);
+
+routes.patch(
+  '/avatar/:id',
+  upload.single('image'),
+  usersController.update,
 );
 
 export default routes;
