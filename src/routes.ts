@@ -24,6 +24,7 @@ routes.post(
         name: Joi.string().required(),
         email: Joi.string().required().email(),
         phone: Joi.number().required(),
+        password: Joi.string().required(),
       }),
     },
     {

@@ -1,6 +1,8 @@
 import { Request, Response } from 'express';
 import knex from '../database/connection';
 
+import bcrypt from 'bcryptjs';
+
 const cfenv = require('cfenv');
 const appEnv = cfenv.getAppEnv();
 
@@ -10,7 +12,10 @@ class UsersController {
 
     const serializedUsers = users.map((user) => {
       return {
-        ...user,
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        phone: user.phone,
         image_url: user.image ? `${appEnv.url}/uploads/${user.image}` :
           'Image not found.',
       };
@@ -29,7 +34,10 @@ class UsersController {
     }
 
     const serializedUser = {
-      ...user,
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      phone: user.phone,
       image_url: user.image ? `${appEnv.url}/uploads/${user.image}` :
           'Image not found.',
     };
@@ -58,14 +66,18 @@ class UsersController {
       name,
       email,
       phone,
+      password,
     } = request.body;
 
     const trx = await knex.transaction();
+
+    const passwordHash = await bcrypt.hash(password, 8);
 
     const user = {
       name,
       email,
       phone,
+      password: passwordHash,
     };
 
     const insertedIds = await trx('users').insert(user);
@@ -76,7 +88,9 @@ class UsersController {
 
     return response.json({
       id: user_id,
-      ...user,
+      name,
+      email,
+      phone,
     });
   }
 
@@ -96,7 +110,10 @@ class UsersController {
     await trx.commit();
 
     const serializedUser = {
-      ...user,
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      phone: user.phone,
       image_url: `${appEnv.url}/uploads/${user.image}`,
     };
 
