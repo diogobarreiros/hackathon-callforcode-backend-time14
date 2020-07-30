@@ -7,6 +7,7 @@ import multerConfig from './config/multer';
 import UsersController from './controllers/UsersController';
 import RecyclersController from './controllers/RecyclersController';
 import TypesController from './controllers/TypesController';
+import SessionsController from './controllers/SessionsController';
 
 const routes = express.Router();
 
@@ -15,6 +16,7 @@ const upload = multer(multerConfig);
 const usersController = new UsersController();
 const recyclersController = new RecyclersController();
 const typesController = new TypesController();
+const sessionsController = new SessionsController();
 
 routes.get('/users/:id', usersController.show);
 routes.get('/users', usersController.index);
@@ -74,5 +76,21 @@ routes.post(
 );
 
 routes.get('/types', typesController.index);
+
+routes.post(
+  '/sessions',
+  celebrate(
+    {
+      body: Joi.object().keys({
+        email: Joi.string().required().email(),
+        password: Joi.string().required(),
+      }),
+    },
+    {
+      abortEarly: false,
+    }
+  ),
+  sessionsController.create
+);
 
 export default routes;
