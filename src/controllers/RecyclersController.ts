@@ -8,7 +8,17 @@ const appEnv = cfenv.getAppEnv();
 
 class RecyclersController {
   async index(request: Request, response: Response) {
-    const recyclers = await knex('recyclers').select('*');
+    const { types } = request.query;
+
+    const parsedTypes = String(types)
+      .split(',')
+      .map((type) => Number(type.trim()));
+
+    const recyclers = await knex('recyclers')
+      .join('recycler_types', 'recyclers.id', '=', 'recycler_types.recycler_id')
+      .whereIn('recycler_types.type_id', parsedTypes)
+      .distinct()
+      .select('recyclers.*');
 
     const serializedRecyclers = recyclers.map((recycler) => {
       return {
@@ -46,7 +56,12 @@ class RecyclersController {
       longitude: recycler.longitude,
     };
 
-    return response.json(serializedRecycler);
+    const types = await knex('types')
+      .join('recycler_types', 'types.id', '=', 'recycler_types.type_id')
+      .where('recycler_types.recycler_id', id)
+      .select('types.title');
+
+    return response.json({ recycler: serializedRecycler, types });
   }
 
   async delete(request: Request, response: Response) {
