@@ -9,6 +9,7 @@ class TypesController {
       return {
         id: type.id,
         title: type.title,
+        image: type.image,
       };
     });
 
