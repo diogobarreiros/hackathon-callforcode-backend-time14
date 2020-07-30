@@ -63,6 +63,7 @@ routes.post(
         enterprise: Joi.boolean().required(),
         latitude: Joi.number().required(),
         longitude: Joi.number().required(),
+        types: Joi.string().required(),
       }),
     },
     {

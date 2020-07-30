@@ -75,6 +75,7 @@ class RecyclersController {
       password,
       latitude,
       longitude,
+      types,
     } = request.body;
 
     const trx = await knex.transaction();
@@ -95,6 +96,18 @@ class RecyclersController {
     const insertedIds = await trx('recyclers').insert(recycler);
 
     const recycler_id = insertedIds[0];
+
+    const recyclerTypes = types
+      .split(',')
+      .map((type: string) => Number(type.trim()))
+      .map((type_id: number) => {
+        return {
+          type_id,
+          recycler_id,
+        };
+      });
+
+    await trx('recycler_types').insert(recyclerTypes);
 
     await trx.commit();
 
