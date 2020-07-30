@@ -6,6 +6,7 @@ import multerConfig from './config/multer';
 
 import UsersController from './controllers/UsersController';
 import RecyclersController from './controllers/RecyclersController';
+import TypesController from './controllers/TypesController';
 
 const routes = express.Router();
 
@@ -13,6 +14,7 @@ const upload = multer(multerConfig);
 
 const usersController = new UsersController();
 const recyclersController = new RecyclersController();
+const typesController = new TypesController();
 
 routes.get('/users/:id', usersController.show);
 routes.get('/users', usersController.index);
@@ -69,5 +71,7 @@ routes.post(
   ),
   recyclersController.create
 );
+
+routes.get('/types', typesController.index);
 
 export default routes;
