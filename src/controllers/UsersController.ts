@@ -16,6 +16,8 @@ class UsersController {
         name: user.name,
         email: user.email,
         phone: user.phone,
+        latitude: user.latitude,
+        longitude: user.longitude,
         image_url: user.image ? `${appEnv.url}/uploads/${user.image}` :
           'Image not found.',
       };
@@ -38,6 +40,8 @@ class UsersController {
       name: user.name,
       email: user.email,
       phone: user.phone,
+      latitude: user.latitude,
+      longitude: user.longitude,
       image_url: user.image ? `${appEnv.url}/uploads/${user.image}` :
           'Image not found.',
     };
@@ -67,6 +71,8 @@ class UsersController {
       email,
       phone,
       password,
+      latitude,
+      longitude,
     } = request.body;
 
     const trx = await knex.transaction();
@@ -77,6 +83,8 @@ class UsersController {
       name,
       email,
       phone,
+      latitude,
+      longitude,
       password: passwordHash,
     };
 
@@ -91,6 +99,8 @@ class UsersController {
       name,
       email,
       phone,
+      latitude,
+      longitude,
     });
   }
 
@@ -114,6 +124,8 @@ class UsersController {
       name: user.name,
       email: user.email,
       phone: user.phone,
+      latitude: user.latitude,
+      longitude: user.longitude,
       image_url: `${appEnv.url}/uploads/${user.image}`,
     };
 

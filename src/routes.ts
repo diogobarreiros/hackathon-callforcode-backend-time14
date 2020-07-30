@@ -27,6 +27,8 @@ routes.post(
         email: Joi.string().required().email(),
         phone: Joi.string().required(),
         password: Joi.string().required(),
+        latitude: Joi.number(),
+        longitude: Joi.number(),
       }),
     },
     {
@@ -57,6 +59,8 @@ routes.post(
         password: Joi.string().required(),
         document: Joi.string().required(),
         enterprise: Joi.boolean().required(),
+        latitude: Joi.number().required(),
+        longitude: Joi.number().required(),
       }),
     },
     {

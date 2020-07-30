@@ -18,6 +18,8 @@ class RecyclersController {
         phone: recycler.phone,
         document: recycler.document,
         enterprise: recycler.enterprise,
+        latitude: recycler.latitude,
+        longitude: recycler.longitude,
       };
     });
 
@@ -40,6 +42,8 @@ class RecyclersController {
       phone: recycler.phone,
       document: recycler.document,
       enterprise: recycler.enterprise,
+      latitude: recycler.latitude,
+      longitude: recycler.longitude,
     };
 
     return response.json(serializedRecycler);
@@ -69,6 +73,8 @@ class RecyclersController {
       document,
       enterprise,
       password,
+      latitude,
+      longitude,
     } = request.body;
 
     const trx = await knex.transaction();
@@ -81,6 +87,8 @@ class RecyclersController {
       phone,
       document,
       enterprise,
+      latitude,
+      longitude,
       password: passwordHash,
     };
 
@@ -97,6 +105,8 @@ class RecyclersController {
       phone,
       document,
       enterprise,
+      latitude,
+      longitude,
     });
   }
 }

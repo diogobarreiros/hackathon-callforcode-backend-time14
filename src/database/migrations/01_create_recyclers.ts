@@ -8,6 +8,8 @@ export async function up(knex: Knex) {
     table.string('phone').notNullable();
     table.string('document').notNullable();
     table.string('password').notNullable();
+    table.decimal('latitude').notNullable();
+    table.decimal('longitude').notNullable();
     table.boolean('enterprise').defaultTo(false);
   });
 }
